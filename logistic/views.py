@@ -23,4 +23,4 @@ class StockViewSet(ModelViewSet):
     filterset_fields = ['products']
 
 def index(request):
-    return HttpResponse('Проверка CI/CD - успешно!!!')
+    return HttpResponse('Проверка CI/CD - успешно!')
