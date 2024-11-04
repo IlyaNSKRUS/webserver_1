@@ -51,3 +51,23 @@ jobs:
           PG_PASSWORD: ${{ env.PG_PASSWORD }}
           PG_HOST: ${{ env.PG_HOST }}
           PG_PORT: ${{ env.PG_PORT }}
+
+  deploy:
+    name: Доставка изменений
+    needs: testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Запуск обновления
+        uses: appleboy/ssh-action@main
+        with:
+          host: ${{ secret.SSH_HOST }}
+          username: ${{ secret.SSH_USERNAME }}
+          password: ${{ secret.SSH_PASSWORD }}
+          script: |
+            cd /opt/webserver_1
+            git pull origin main
+            source env/bin/activate
+            pip install -r requirements.txt
+            python manage.py migrate
+            systemctl restart gunicorn
+          
